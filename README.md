@@ -27,18 +27,11 @@
 
 ## 安装
 
-### 方式一：在线导入（推荐）
-
 复制插件地址，Loon → 配置 → 插件 → 右上角 `+` → 粘贴 → 保存：
 
 ```
 https://cdn.jsdelivr.net/gh/taiji951906413/fanqie-loon@main/fanqie.plugin
 ```
-
-### 方式二：从文件导入
-
-下载 `fanqie.plugin`，存到「文件」App（iCloud Drive 或 我的 iPhone 都行），
-Loon → 配置 → 插件 → 右上角 `+` → 从文件导入 → 选这个文件。
 
 ### 装证书
 
@@ -141,7 +134,7 @@ https://cdn.jsdelivr.net/gh/taiji951906413/fanqie-loon@main/fanqie_ad_filter.js
 
 | 文件 | 说明 |
 |---|---|
-| `fanqie.plugin` | 插件本体，导入这个 |
+| `fanqie.plugin` | 插件本体，用上面的地址在线导入 |
 | `fanqie_ad_filter.js` | 信息流过滤脚本，插件里已引用，不用单独下载 |
 
 ## 免责声明
