@@ -1,0 +1,63 @@
+#!name=番茄系去广告（番茄小说/畅听/红果）
+#!desc=拦截广告 SDK 与埋点域名；可选过滤信息流广告。分级开关，默认只开安全档。
+#!system=ios
+#!homepage=https://github.com/taiji951906413/fanqie-loon
+
+# ============================================================
+# 使用说明
+#   1. Loon → 配置 → 插件 → 右上角 + → 粘贴本文件的在线地址
+#   2. 先只用【档位 A】，跑两天确认没影响功能，再考虑开 B
+#   3. 档位 C 是风险项，默认注释掉
+#   4. 想要信息流广告也去掉，见文件末尾【进阶配置】的说明
+# ============================================================
+
+[Rule]
+
+# ---------- 档位 A：广告 SDK（安全，建议常开） ----------
+# 开屏、激励视频、Banner 走这里。
+# 拦掉后广告位空白，不影响阅读/听书/看剧。
+DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT
+DOMAIN-SUFFIX,pglstatp-toutiao.com,REJECT
+DOMAIN-SUFFIX,oceanengine.com,REJECT
+
+# ---------- 档位 B：埋点与统计（安全，只是少上报） ----------
+DOMAIN-SUFFIX,mon.snssdk.com,REJECT
+DOMAIN-SUFFIX,mcs.snssdk.com,REJECT
+DOMAIN-SUFFIX,apm.snssdk.com,REJECT
+DOMAIN-SUFFIX,toblog.snssdk.com,REJECT
+DOMAIN-SUFFIX,dig.bdurl.net,REJECT
+
+# ---------- 档位 C：风险项，默认关闭 ----------
+# 这两条会拦到 App 的主日志通道和设备注册通道，
+# 部分版本下可能触发"环境异常"提示，所以默认注释掉。
+# 想试的话，去掉行首的 # 号，并且随时准备改回来。
+# DOMAIN-SUFFIX,log.snssdk.com,REJECT
+# DOMAIN-SUFFIX,gurd.snssdk.com,REJECT
+
+# ---------- 千万不要拦这些 ----------
+# 下面几个是主接口和图片 CDN，拦了 App 会白屏或加载不出封面：
+#   api5-normal-sinfonlinea.fqnovel.com   主接口
+#   api.fqnovel.com                       资源包下发
+#   reading.snssdk.com                    H5 页面与接口
+#   lf3-reading.fqnovelpic.com            封面/插图 CDN
+
+
+# ============================================================
+# 进阶配置（信息流过滤）—— 默认关闭
+# 需要先装并信任 Loon 的 MITM 证书，否则不要开。
+# 开启方法：把下面两段里带 URL 的那一行前面的 # 去掉即可，
+#          脚本地址已经填好了，不用改。
+# 不需要进阶功能的话，下面两段保持原样，插件照常工作。
+# ============================================================
+
+[Script]
+
+# 改响应内容，删掉带广告标记的条目。
+# http-response ^https?://(?:api\d*-normal-[a-z0-9]+\.fqnovel\.com|api\.fqnovel\.com|reading\.snssdk\.com|imapi-oth\.zijieapi\.com)/ script-path=https://cdn.jsdelivr.net/gh/taiji951906413/fanqie-loon@main/fanqie_ad_filter.js, requires-body=true, max-size=0, timeout=30
+
+
+[MITM]
+
+# 只对接口域名解密，不碰图片和 CDN，省电省流量
+# hostname = %APPEND% *.fqnovel.com, *.snssdk.com, *.zijieapi.com
